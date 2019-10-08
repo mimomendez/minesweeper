@@ -1,0 +1,56 @@
+.container {
+    width: 100%;
+}
+
+.game-container {
+    width: 95%;
+    height: 500px;
+    margin: auto;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+.left-panel {
+    position: relative;
+    display: inline;
+    float: left;
+    width: 30%;
+    height: 100%;
+    padding: 5% 0 0 5%;
+    font-size: 18px;
+}
+
+.custom-control.custom-radio {
+    padding-top: 10px;
+}
+
+.right-panel {
+    position: relative;
+    display: inline;
+    float: left;
+    width: 70%;
+    height: 100%;
+    padding: 5% 0 0 5%;
+}
+
+.table {
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.table th,
+.table td {
+    border-top: 0!important;
+}
+
+td {
+    width: 16px;
+    height: 16px;
+    padding: 0px!important;
+}
+
+div.empty {
+    background-image: url('../assets/images/untouch.png');
+    width: 16px;
+    height: 16px;
+}
