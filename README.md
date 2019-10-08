@@ -1,0 +1,2 @@
+# minesweeper
+AngularJS - minesweeper game
