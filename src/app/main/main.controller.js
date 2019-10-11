@@ -20,8 +20,11 @@
     .controller('MainController', MainController);
 
     /** @ngInject */
-    function MainController($scope) {
-        var vm = this;
+    function MainController($scope, $interval) {
+        //var vm = this;
+        var newGame = true;
+        $scope.timer = 0;
+        var clock;
 
         //set game initial values
         $scope.game = {
@@ -29,11 +32,113 @@
             difficulty: "beg", //beg - inter - exp - cust
             wtotal: 8, // 8 - 15 - 29
             htotal: 8, // 8 - 15 - 15
-            mines: 10 // 10 - 40- 99
+            mines: 10, // 10 - 40- 99
+            flagCounter: 10
         };
+
+        $scope.leftc = '../../assets/images/d0.png';
+        $scope.leftd = '../../assets/images/d0.png';
+        $scope.leftu = '../../assets/images/d0.png';
+        $scope.rightc = '../../assets/images/d0.png';
+        $scope.rightd = '../../assets/images/d0.png';
+        $scope.rightu = '../../assets/images/d0.png';
+
+        function myTimer() {
+            $scope.timer++;
+            var output = [],
+                sNumber = $scope.timer.toString();
+            for (var i = 0, len = sNumber.length; i < len; i += 1) {
+                output.push(+sNumber.charAt(i));
+            }
+            if (output.length == 4) {
+                $scope.rightc = '../../assets/images/d9.png';
+                $scope.rightd = '../../assets/images/d9.png';
+                $scope.rightu = '../../assets/images/d9.png';
+            } else if (output.length == 3) {
+                $scope.rightc = '../../assets/images/d' + output[0] + '.png';
+                $scope.rightd = '../../assets/images/d' + output[1] + '.png';
+                $scope.rightu = '../../assets/images/d' + output[2] + '.png';
+            } else if (output.length == 2) {
+                $scope.rightc = '../../assets/images/d0.png';
+                $scope.rightd = '../../assets/images/d' + output[0] + '.png';
+                $scope.rightu = '../../assets/images/d' + output[1] + '.png';
+            } else {
+                $scope.rightc = '../../assets/images/d0.png';
+                $scope.rightd = '../../assets/images/d0.png';
+                $scope.rightu = '../../assets/images/d' + output[0] + '.png';
+            }
+        };
+
+        $scope.$watch('game.flagCounter', function(newValue, oldValue) {
+            var output = [],
+                sNumber = $scope.game.flagCounter.toString();
+            for (var i = 0, len = sNumber.length; i < len; i += 1) {
+                output.push(+sNumber.charAt(i));
+            }
+            if (output.length == 4) {
+                $scope.leftc = '../../assets/images/d-.png';
+                $scope.leftd = '../../assets/images/d9.png';
+                $scope.leftu = '../../assets/images/d9.png';
+            } else if (output.length == 3 && isNaN(output[0])) {
+                $scope.leftc = '../../assets/images/d-.png';
+                $scope.leftd = '../../assets/images/d' + output[1] + '.png';
+                $scope.leftu = '../../assets/images/d' + output[2] + '.png';
+            } else if (output.length == 2 && isNaN(output[0])) {
+                $scope.leftc = '../../assets/images/d-.png';
+                $scope.leftd = '../../assets/images/d0.png';
+                $scope.leftu = '../../assets/images/d' + output[1] + '.png';
+            } else if (output.length == 2 && !isNaN(output[0])) {
+                $scope.leftc = '../../assets/images/d0.png';
+                $scope.leftd = '../../assets/images/d' + output[0] + '.png';
+                $scope.leftu = '../../assets/images/d' + output[1] + '.png';
+            } else if (output.length == 1) {
+                $scope.leftc = '../../assets/images/d0.png';
+                $scope.leftd = '../../assets/images/d0.png';
+                $scope.leftu = '../../assets/images/d' + output[0] + '.png';
+            }
+        }, true);
+
+        $scope.face = {
+            value: 0,
+            src: '../../assets/images/face0.png'
+        };
+
+        $scope.clickFace = function() {
+            $interval.cancel(clock);
+            $scope.timer = 0;
+            newGame = true;
+            $scope.face = {
+                value: 0,
+                src: '../../assets/images/face0.png'
+            };
+            $scope.rightc = '../../assets/images/d0.png';
+            $scope.rightd = '../../assets/images/d0.png';
+            $scope.rightu = '../../assets/images/d0.png';
+            $scope.changeGame($scope.game.difficulty);
+        };
+
+        $scope.touchFace = function() {
+            $scope.face = {
+                value: 1,
+                src: '../../assets/images/face1.png'
+            };
+        }
+
+        $scope.untouchFace = function() {
+            $scope.face = {
+                value: 0,
+                src: '../../assets/images/face0.png'
+            };
+        }
 
         //change levels
         $scope.changeGame = function(diff) {
+            $interval.cancel(clock);
+            $scope.timer = 0;
+            newGame = true;
+            $scope.rightc = '../../assets/images/d0.png';
+            $scope.rightd = '../../assets/images/d0.png';
+            $scope.rightu = '../../assets/images/d0.png';
             switch (diff) {
                 case 'beg':
                     $scope.game = {
@@ -41,7 +146,8 @@
                         difficulty: "beg",
                         wtotal: 8,
                         htotal: 8,
-                        mines: 10
+                        mines: 10,
+                        flagCounter: 10
                     }
                     break;
                 case 'inter':
@@ -50,7 +156,8 @@
                         difficulty: "inter",
                         wtotal: 15,
                         htotal: 15,
-                        mines: 40
+                        mines: 40,
+                        flagCounter: 40
                     }
                     break;
                 case 'exp':
@@ -59,10 +166,11 @@
                         difficulty: "exp",
                         wtotal: 29,
                         htotal: 15,
-                        mines: 99
+                        mines: 99,
+                        flagCounter: 99
                     }
                     break;
-            }
+            };
             generateGrid();
         };
 
@@ -147,7 +255,7 @@
                 }
                 y = col - 1;
             }
-        }
+        };
 
         //check if game is finish
         function checkStatus() {
@@ -163,33 +271,48 @@
                 alert("You Win!");
                 finishGame();
             }
-        }
+        };
 
         $scope.rightClickCell = function(cell) {
             switch (cell.src) {
                 case '../../assets/images/untouch.png':
                     cell.src = '../../assets/images/flag.png';
+                    $scope.game.flagCounter--;
                     break;
                 case '../../assets/images/flag.png':
                     cell.src = '../../assets/images/qmark.png';
+                    $scope.game.flagCounter++;
                     break;
                 case '../../assets/images/qmark.png':
                     cell.src = '../../assets/images/untouch.png';
                     break;
             }
-        }
+        };
 
         $scope.clickCell = function(cell) {
-            if (cell.mine) {
-                cell.src = '../../assets/images/minered.png';
-                alert("You Lose!");
-                finishGame();
-            } else {
-                repacleCellImage(cell);
-                if (cell.value == 0) {
-                    emptyCellShow(cell.posX, cell.posY);
+            //check game status
+            if ($scope.game.mode == 'off' && newGame) {
+                $scope.game.mode = 'on';
+                newGame = false;
+                clock = $interval(myTimer, 1000);
+            }
+            if ($scope.game.mode == 'on') {
+                if (cell.src != '../../assets/images/flag.png' && cell.src != '../../assets/images/qmark.png') {
+                    if (cell.mine) {
+                        cell.src = '../../assets/images/minered.png';
+                        $scope.face = {
+                            value: 2,
+                            src: '../../assets/images/face2.png'
+                        };
+                        finishGame();
+                    } else {
+                        repacleCellImage(cell);
+                        if (cell.value == 0) {
+                            emptyCellShow(cell.posX, cell.posY);
+                        }
+                        checkStatus();
+                    }
                 }
-                checkStatus();
             }
         };
 
@@ -226,21 +349,26 @@
                     cell.src = '../../assets/images/t9.png';
                     break;
             }
-        }
+        };
 
         function finishGame() {
+            $interval.cancel(clock);
+            $scope.timer = 0;
             for (let i = 0; i <= $scope.game.htotal; i++) {
                 for (let j = 0; j <= $scope.game.wtotal; j++) {
                     //mine
                     if ($scope.rows[i][j].src != '../../assets/images/minered.png') {
                         if ($scope.rows[i][j].mine) {
                             $scope.rows[i][j].src = '../../assets/images/mine.png';
-                        } else {
+                        } else if ($scope.rows[i][j].src == '../../assets/images/flag.png' && !$scope.rows[i][j].mine) {
+                            $scope.rows[i][j].src = '../../assets/images/minecross.png';
+                        } else if ($scope.rows[i][j].src != '../../assets/images/qmark.png') {
                             repacleCellImage($scope.rows[i][j]);
                         }
                     }
                 }
             }
-        }
+            $scope.game.mode = 'off';
+        };
     }
 })();

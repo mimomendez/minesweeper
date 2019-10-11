@@ -1,5 +1,4 @@
 <div class="container">
-
     <div class="jumbotron text-center">
         <h1>Minesweeper</h1>
     </div>
@@ -24,15 +23,30 @@
             </div>-->
         </div>
         <div class="right-panel">
-            <table>
-                <tbody class="table">
-                    <tr ng-repeat="row in rows track by $index">
-                        <td ng-repeat="cell in row track by $index">
-                            <img ng-click="clickCell(cell)" ng-right-click="rightClickCell(cell)" width="20" height="20" src="{{cell.src}}" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="grid-container">
+                <div class="topContainer">
+                    <div class="clockContainer left">
+                        <img class="clockImage" width="24" height="36" src="{{leftc}}" />
+                        <img class="clockImage" width="24" height="36" src="{{leftd}}" />
+                        <img class="clockImage" width="24" height="36" src="{{leftu}}" />
+                    </div>
+                    <img ng-click="clickFace()" width="36" height="36" src="{{face.src}}" />
+                    <div class="clockContainer right">
+                        <img class="clockImage" width="24" height="36" src="{{rightc}}" />
+                        <img class="clockImage" width="24" height="36" src="{{rightd}}" />
+                        <img class="clockImage" width="24" height="36" src="{{rightu}}" />
+                    </div>
+                </div>
+                <table>
+                    <tbody class="table">
+                        <tr ng-repeat="row in rows track by $index">
+                            <td ng-repeat="cell in row track by $index">
+                                <img ng-click="clickCell(cell)" ng-right-click="rightClickCell(cell)" ng-mousedown="touchFace()" ng-mouseup="untouchFace()" width="20" height="20" src="{{cell.src}}" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

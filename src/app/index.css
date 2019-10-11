@@ -33,6 +33,44 @@
     padding: 5% 0 0 5%;
 }
 
+.grid-container {
+    width: 100%;
+}
+
+.topContainer {
+    margin-left: auto!important;
+    margin-right: auto!important;
+    width: 223px;
+    height: 60px;
+    padding: 1%;
+    border: 5px solid black;
+}
+
+.clockContainer {
+    position: relative;
+    display: inline;
+    width: 72px;
+    height: 36px;
+}
+
+.clockContainer.left {
+    margin-right: 5%;
+}
+
+.clockContainer.right {
+    margin-left: 3%;
+}
+
+.clockImage {
+    margin: 0 -4px 0 0;
+}
+
+table {
+    margin-top: 2%;
+    margin-left: auto!important;
+    margin-right: auto!important;
+}
+
 .table {
     border: 2px solid black;
     border-radius: 5px;
