@@ -139,6 +139,10 @@
 
         //change levels
         $scope.changeGame = function(diff) {
+            $scope.face = {
+                value: 0,
+                src: '../../assets/images/face0.png'
+            };
             $interval.cancel(clock);
             $scope.timer = 0;
             newGame = true;
