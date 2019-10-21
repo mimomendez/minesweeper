@@ -7,7 +7,6 @@ This is the first version of game Minesweeper. It's not complete, there are some
 * time tracking.
 * new game button (new game are creating by changing game option level).
 * right click button: it's working only to set flags and question marks but on a finish game do not show correct images.
-* option to create a custom game level (number of rows, cols and mines)
 
 This points will be done in next version.
 
