@@ -17,10 +17,6 @@
                 <input type="radio" ng-change="changeGame(game.difficulty)" ng-model="game.difficulty" value="exp" class="custom-control-input" id="expert">
                 <label class="custom-control-label" for="expert">Expert</label>
             </div>
-            <!--<div class="custom-control custom-radio">
-                <input type="radio" ng-change="changeGame(game.difficulty)" ng-model="game.difficulty" value="cust" class="custom-control-input" id="custom">
-                <label class="custom-control-label" for="custom">Custom</label>
-            </div>-->
         </div>
         <div class="right-panel">
             <div class="grid-container">
@@ -41,7 +37,7 @@
                     <tbody class="table">
                         <tr ng-repeat="row in rows track by $index">
                             <td ng-repeat="cell in row track by $index">
-                                <img ng-click="clickCell(cell)" ng-right-click="rightClickCell(cell)" ng-mousedown="touchFace()" ng-mouseup="untouchFace()" width="20" height="20" src="{{cell.src}}" />
+                                <img ng-click="clickCell(cell)" ng-right-click="rightClickCell(cell)" ng-mousedown="touchFace(cell)" ng-mouseup="untouchFace()" width="20" height="20" src="{{cell.src}}" />
                             </td>
                         </tr>
                     </tbody>

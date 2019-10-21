@@ -21,21 +21,22 @@
 
     /** @ngInject */
     function MainController($scope, $interval) {
-        //var vm = this;
+
         var newGame = true;
-        $scope.timer = 0;
         var clock;
+        $scope.timer = 0;
 
         //set game initial values
         $scope.game = {
             mode: "off", // on - pause - off
-            difficulty: "beg", //beg - inter - exp - cust
+            difficulty: "beg", //beg - inter - exp
             wtotal: 8, // 8 - 15 - 29
             htotal: 8, // 8 - 15 - 15
             mines: 10, // 10 - 40- 99
             flagCounter: 10
         };
 
+        //clock images
         $scope.leftc = '../../assets/images/d0.png';
         $scope.leftd = '../../assets/images/d0.png';
         $scope.leftu = '../../assets/images/d0.png';
@@ -43,6 +44,7 @@
         $scope.rightd = '../../assets/images/d0.png';
         $scope.rightu = '../../assets/images/d0.png';
 
+        //change clock
         function myTimer() {
             $scope.timer++;
             var output = [],
@@ -69,6 +71,7 @@
             }
         };
 
+        //update flag counter
         $scope.$watch('game.flagCounter', function(newValue, oldValue) {
             var output = [],
                 sNumber = $scope.game.flagCounter.toString();
@@ -98,11 +101,13 @@
             }
         }, true);
 
+        //initial state of new game button
         $scope.face = {
             value: 0,
             src: '../../assets/images/face0.png'
         };
 
+        //new game button
         $scope.clickFace = function() {
             $interval.cancel(clock);
             $scope.timer = 0;
@@ -117,6 +122,7 @@
             $scope.changeGame($scope.game.difficulty);
         };
 
+        //events on click cell
         $scope.touchFace = function() {
             $scope.face = {
                 value: 1,
@@ -213,7 +219,7 @@
             }
         };
 
-        //update numbers aorund mines
+        //update numbers around mines
         function updateNeighbors(row, col) {
             var x = row - 1,
                 xt = row + 1,
@@ -262,13 +268,20 @@
             var levelComplete = true;
             for (let i = 0; i <= $scope.game.htotal; i++) {
                 for (let j = 0; j <= $scope.game.wtotal; j++) {
-                    if ($scope.rows[i][j].src == '../../assets/images/untouch.png' && $scope.rows[i][j].mine == false) {
+                    if ($scope.rows[i][j].src == '../../assets/images/qmark.png' || $scope.rows[i][j].src == '../../assets/images/untouch.png' && $scope.rows[i][j].mine == false) {
                         levelComplete = false;
                     }
                 }
             }
             if (levelComplete) {
                 alert("You Win!");
+                $scope.face = {
+                    value: 3,
+                    src: '../../assets/images/face3.png'
+                };
+                $scope.leftc = '../../assets/images/d0.png';
+                $scope.leftd = '../../assets/images/d0.png';
+                $scope.leftu = '../../assets/images/d0.png';
                 finishGame();
             }
         };
@@ -306,15 +319,55 @@
                         };
                         finishGame();
                     } else {
-                        repacleCellImage(cell);
-                        if (cell.value == 0) {
-                            emptyCellShow(cell.posX, cell.posY);
+                        if (cell.src != '../../assets/images/empty.png') {
+                            if (cell.src == '../../assets/images/untouch.png') {
+                                repacleCellImage(cell);
+                                if (cell.value == 0) {
+                                    emptyCellShow(cell.posX, cell.posY);
+                                }
+                                checkStatus();
+                            } else {
+                                touchNumberHelper(cell.posX, cell.posY, cell.value);
+                            }
                         }
-                        checkStatus();
                     }
                 }
             }
         };
+
+        function checkFlagAround(row, col, number) {
+            var x = row - 1,
+                xt = row + 1,
+                y = col - 1,
+                yt = col + 1,
+                flagCounter = 0;
+            for (x; x <= xt; x++) {
+                for (y; y <= yt; y++) {
+                    //check limits
+                    if (x >= 0 && y >= 0 && x <= $scope.game.htotal && y <= $scope.game.wtotal) {
+                        //check if cell was touched
+                        if ($scope.rows[x][y].src == '../../assets/images/flag.png') {
+                            //check emptys neighbors
+                            flagCounter++;
+                        }
+                    }
+                }
+                y = col - 1;
+            }
+            if (flagCounter == number) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function touchNumberHelper(row, col, number) {
+            var help = checkFlagAround(row, col, number);
+            if (help) {
+                emptyCellShow(row, col);
+            }
+            checkStatus();
+        }
 
         function repacleCellImage(cell) {
             switch (cell.value) {
